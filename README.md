@@ -7,6 +7,7 @@
 - переопределил функцию std::lower_bound (по-факту просто скопировал реализацию и чуть-чуть изменил, т.к. она у меня что-то не работала) 
 и вынес её и 3 компаратора в отдельные файлы (Support_function.(h/cpp))
 - изменил немного поиски (теперь оба выводят все Line с искомой подстрокой (только при поиске по имени, при поиске по интам и там и там выводит 1 результат) )
+    
     ниже пример для bin_searche
 Binary search?    y - yes, n - no:
 н
@@ -25,6 +26,7 @@ Enter -q- to exit
 2092; Zhlobinsky; 340068
 2093; Zhlobin-Sorting (OP.); 155841
 END. Search in catalog took 3.8408 ms
+    
     для searche
 Again?    y - yes, n - no: y
 Binary search?    y - yes, n - no:
