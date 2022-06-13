@@ -139,13 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="class_LINE.cpp" />
-    <ClCompile Include="class_Vec.cpp" />
-    <ClCompile Include="test2.cpp" />
+    <ClCompile Include="Cache.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Support_function.cpp" />
+    <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="catalog.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="class_LINE.h" />
-    <ClInclude Include="class_Vec.h" />
+    <ClInclude Include="Cache.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="Support_function.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
