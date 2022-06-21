@@ -79,10 +79,10 @@ void Catalog::delete_line(std::vector<Line>::iterator it_del)
 
 std::vector<Line>::iterator Catalog::searcher(const std::string& string_to_search, char Choise)
 {
-    //search_in_cache(string_to_search, Choise);
     auto searche_number = 0;
+    int count_operation = 0;
     std::chrono::steady_clock::time_point begin, end;
-    std::vector<Line>::iterator searche_line_it = general_catalog.end();
+    std::vector<Line>::iterator searche_line_it = general_catalog.end() - 1;
     switch (Choise)
     {
     case '1':
@@ -93,25 +93,32 @@ std::vector<Line>::iterator Catalog::searcher(const std::string& string_to_searc
             if ((*i).get_item_number() == searche_number)
             {
                 end = std::chrono::high_resolution_clock().now();
-                /*to_cache(&(*i));*/
+                //to_cache((*i));
                 (*i).print_LINE();
+                count_operation++;
                 searche_line_it = i;
                 break;
             }
         }
+        if (count_operation == 0)
+            (*searche_line_it).print_LINE();
         break;
     case '2':
         begin = std::chrono::high_resolution_clock().now();
-        for (auto i = general_catalog.begin(); i < general_catalog.end(); i++)
+        for (auto i = general_catalog.begin(); i < general_catalog.begin(); i++)
         {
             if ((*i).get_name().find(string_to_search) != std::string::npos)
             {
                 end = std::chrono::high_resolution_clock().now();
                 /*to_cache(&(*i));*/
                 (*i).print_LINE();
-                searche_line_it = i;
+                if (count_operation == 0)
+                    searche_line_it = i;
+                count_operation++;
             }
         }
+        if(count_operation == 0)
+            (*searche_line_it).print_LINE();
         break;
     case '3':
         searche_number = std::stoi(string_to_search);
@@ -123,10 +130,13 @@ std::vector<Line>::iterator Catalog::searcher(const std::string& string_to_searc
                 end = std::chrono::high_resolution_clock().now();
                 /*to_cache(&(*i));*/
                 (*i).print_LINE();
+                count_operation++;
                 searche_line_it = i;
                 break;
             }
         }
+        if (count_operation == 0)
+            (*searche_line_it).print_LINE();
         break;
     default:
         std::cout << "What?\n";
@@ -136,92 +146,59 @@ std::vector<Line>::iterator Catalog::searcher(const std::string& string_to_searc
     return searche_line_it;
 }
 
-Line* Catalog::bin_searcher(const std::string& string_to_search, char Choise)
+std::vector<Line*>::iterator Catalog::bin_searcher(const std::string& string_to_search, char Choise)
 {
-    /*Line* line_from_cache = search_in_cache(string_to_search, Choise);*/
-    /*bool empty = false;
-    if (line_from_cache == nullptr)
-        empty = true;*/
     int searche_number = 0;
     int i = 0;
-    if(Choise != '2')
+    if (Choise != '2')
         searche_number = std::stoi(string_to_search);
     std::chrono::steady_clock::time_point begin, end;
     std::vector<Line*>::iterator searche_line_it;
-    Line a(searche_number, string_to_search, searche_number);
-    bool (*funct)(const Line*, const Line*);
+    Line temp_line(searche_number, string_to_search, searche_number);
     switch (Choise)
     {
     case '1':
-        /*if (empty == false && (*(line_from_cache)).get_item_number() == searche_number)
-            (*line_from_cache).print_LINE();
-        else
-        {*/
-            funct = item_number_compare;
-            begin = std::chrono::high_resolution_clock().now();
-            searche_line_it = lower_bound(catalog_sorted_by_item_number.begin(), catalog_sorted_by_item_number.end(), a, funct);
-            end = std::chrono::high_resolution_clock().now();
-            /*to_cache(*searche_line_it);*/
-            (*(*searche_line_it)).print_LINE();
-        //}
+        begin = std::chrono::high_resolution_clock().now();
+        searche_line_it = std::lower_bound(catalog_sorted_by_item_number.begin(), catalog_sorted_by_item_number.end() - 1, &temp_line, &item_number_compare);
+        end = std::chrono::high_resolution_clock().now();
+        //to_cache(*searche_line_it);
+        (*searche_line_it)->print_LINE();
         break;
     case '2':
-        //if (empty == false && (*(line_from_cache)).get_name() == string_to_search)
-        //{
-        //    (*line_from_cache).print_LINE();
-        //    do
-        //    {
-        //        (*(line_from_cache + i)).print_LINE();     // (*(*(First + i))) получение указателя по итератору и последующее его разыменовывание 
-        //        i++;
-        //    } while (!(*(line_from_cache + i)).get_name().find(string_to_search));
-        //}
-        //else
-        //{
-            funct = name_compare;
-            begin = std::chrono::high_resolution_clock().now();
-            searche_line_it = lower_bound(catalog_sorted_by_name.begin(), catalog_sorted_by_name.end(), a, funct);
-            end = std::chrono::high_resolution_clock().now();
-            /*to_cache(*searche_line_it);*/
-            do
-            {
-                (*(*(searche_line_it + i))).print_LINE();     // (*(*(First + i))) получение указателя по итератору и последующее его разыменовывание 
-                i++;
-            } while (!(*(*(searche_line_it + i))).get_name().find(string_to_search));
-        //}
+        begin = std::chrono::high_resolution_clock().now();
+        searche_line_it = std::lower_bound(catalog_sorted_by_name.begin(), catalog_sorted_by_name.end() - 1, &temp_line, &name_compare);
+        end = std::chrono::high_resolution_clock().now();
+        //to_cache(*searche_line_it);
+        do
+        {
+            (*(searche_line_it + i))->print_LINE();     
+            i++;
+        } while (!(*(searche_line_it + i))->get_name().find(string_to_search));
         break;
     case '3':
-        /*if (empty == false && (*(line_from_cache)).get_station_code() == searche_number)
-            (*line_from_cache).print_LINE();
-        else
-        {*/
-            funct = station_code_compare;
-            begin = std::chrono::high_resolution_clock().now();
-            searche_line_it = lower_bound(catalog_sorted_by_station_code.begin(), catalog_sorted_by_station_code.end(), a, funct);
-            end = std::chrono::high_resolution_clock().now();
-            //to_cache(*searche_line_it);
-            (*(*searche_line_it)).print_LINE();
-        //}
+        begin = std::chrono::high_resolution_clock().now();
+        searche_line_it = std::lower_bound(catalog_sorted_by_station_code.begin(), catalog_sorted_by_station_code.end() - 1, &temp_line, &station_code_compare);
+        end = std::chrono::high_resolution_clock().now();
+        //to_cache(*searche_line_it);
+        (*searche_line_it)->print_LINE();
         break;
     case 'q':
         break;
     default:
         std::cout << "What?\n";
     }
-    std::chrono::duration<double> result = (end - begin) * 1000.;
-    std::cout << "END. Binary search in catalog took " << result.count() << " ms" << std::endl << std::endl;
-    return *searche_line_it;
-}
-
-
-void Catalog::print_Vec()
-{
-    std::cout << "--------------------------------Vector start--------------------------------" << std::endl;
-    for (auto i = general_catalog.begin(); i != general_catalog.end(); i++)
-    {
-        (*i).print_LINE();
+        std::chrono::duration<double> result = (end - begin) * 1000.;
+        std::cout << "END. Binary search in catalog took " << result.count() << " ms" << std::endl << std::endl;
+        return searche_line_it;
     }
-    std::cout << "--------------------------------Vector ended--------------------------------" << std::endl;
-}
 
 
-
+    void Catalog::print_catalog()
+    {
+        std::cout << "--------------------------------Vector start--------------------------------" << std::endl;
+        for (auto i = general_catalog.begin(); i != general_catalog.end(); i++)
+        {
+            (*i).print_LINE();
+        }
+        std::cout << "--------------------------------Vector ended--------------------------------" << std::endl;
+    }

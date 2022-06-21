@@ -1,9 +1,10 @@
 #pragma once
 #include <chrono>
 #include <fstream>
+#include <vector>
 #include "Cache.h"
 
-class Catalog 
+class Catalog
 {
 private:
     std::vector<Line> general_catalog;
@@ -23,7 +24,7 @@ public:
     void delete_line(std::vector<Line>::iterator it_del);
 
     std::vector<Line>::iterator searcher(const std::string& string_to_search, char Choise);
-    Line* bin_searcher(const std::string& string_to_search, char Choise);
+    std::vector<Line*>::iterator bin_searcher(const std::string& string_to_search, char Choise);
 
-    void print_Vec();
+    void print_catalog();
 };
